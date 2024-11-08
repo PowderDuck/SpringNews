@@ -2,7 +2,6 @@ package com.management.news.service;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ public class JwtService implements IJwtService {
     private static final String KEY = "AV15236AADVARB736251";
     private static final long EXPIRATION_TIME = 1000L * 60L * 10L; // Valid for 10 minutes;
 
-    public String GenerateToken(String username)
+    public String generateToken(String username)
     {
         return Jwts.builder()
                 .setSubject(username)
@@ -24,17 +23,17 @@ public class JwtService implements IJwtService {
                 .compact();
     }
 
-    public String ExtractUsername(String token)
+    public String extractUsername(String token)
     {
-        return ExtractClaims(token).getSubject();
+        return extractClaims(token).getSubject();
     }
 
-    private Date ExtractExpirationDate(String token)
+    private Date extractExpirationDate(String token)
     {
-        return ExtractClaims(token).getExpiration();
+        return extractClaims(token).getExpiration();
     }
 
-    private Claims ExtractClaims(String token)
+    private Claims extractClaims(String token)
     {
         return Jwts.parser()
                 .setSigningKey(KEY)
@@ -42,14 +41,14 @@ public class JwtService implements IJwtService {
                 .getBody();
     }
 
-    private boolean IsExpired(Date expirationDate)
+    private boolean isExpired(Date expirationDate)
     {
         return expirationDate.before(new Date());
     }
 
-    public boolean ValidateToken(String token, UserDetails user)
+    public boolean validateToken(String token, UserDetails user)
     {
-        return ExtractUsername(token).equals(user.getUsername()) 
-            && !IsExpired(ExtractExpirationDate(token));
+        return extractUsername(token).equals(user.getUsername()) 
+            && !isExpired(extractExpirationDate(token));
     }
 }

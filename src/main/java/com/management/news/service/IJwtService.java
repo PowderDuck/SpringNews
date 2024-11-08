@@ -3,7 +3,7 @@ package com.management.news.service;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface IJwtService {
-    String GenerateToken(String username);
-    boolean ValidateToken(String token, UserDetails user);
-    String ExtractUsername(String token);
+    String generateToken(String username);
+    boolean validateToken(String token, UserDetails user);
+    String extractUsername(String token);
 }

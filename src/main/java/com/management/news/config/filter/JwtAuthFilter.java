@@ -19,10 +19,10 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthFilter extends OncePerRequestFilter {
     
     @Autowired
-    private JwtService JwtService;
+    private JwtService jwtService;
 
     @Autowired
-    private UserInfoService UserInfoService;
+    private UserInfoService userInfoService;
 
     @SuppressWarnings("null")
     @Override
@@ -37,13 +37,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer"))
         {
             token = authHeader.substring(7);
-            username = JwtService.ExtractUsername(token);
+            username = jwtService.extractUsername(token);
         }
 
         if (username != null && securityContext.getAuthentication() == null)
         {
-            var userDetails = UserInfoService.loadUserByUsername(username);
-            if (JwtService.ValidateToken(token, userDetails))
+            var userDetails = userInfoService.loadUserByUsername(username);
+            if (jwtService.validateToken(token, userDetails))
             {
                 UsernamePasswordAuthenticationToken authToken = 
                     new UsernamePasswordAuthenticationToken(

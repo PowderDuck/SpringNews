@@ -6,14 +6,14 @@ import com.management.news.model.ShortNewsSegment;
 
 public interface INewsService
 {
-    void SaveSegment(NewsSegment segment);
-    void SaveSegments(Iterable<NewsSegment> segments);
-    Iterable<NewsSegment> FindAllSegments();
-    Iterable<NewsSegment> FindAllSegments(int pageNumber, int pageSize);
-    Iterable<NewsSegment> FindAllSegmentsByIds(Iterable<Long> ids);
-    Iterable<ShortNewsSegment> FindAllSegmentsShort();
-    Iterable<DetailedNewsSegment> FindAllSegmentsDetailed();
-    NewsSegment FindSegmentById(Long id);
-    void UpdateSegment(NewsSegment segment);
-    void DeleteSegmentById(Long id);
+    void saveSegment(NewsSegment segment);
+    void saveSegments(Iterable<NewsSegment> segments);
+    Iterable<NewsSegment> findAllSegments();
+    Iterable<NewsSegment> findAllSegments(int pageNumber, int pageSize);
+    Iterable<NewsSegment> findAllSegmentsByIds(Iterable<Long> ids);
+    Iterable<ShortNewsSegment> findAllSegmentsShort();
+    Iterable<DetailedNewsSegment> findAllSegmentsDetailed();
+    NewsSegment findSegmentById(Long id);
+    void updateSegment(NewsSegment segment);
+    void deleteSegmentById(Long id);
 }

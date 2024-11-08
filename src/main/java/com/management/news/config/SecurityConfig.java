@@ -26,51 +26,53 @@ import com.management.news.service.UserInfoService;
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthFilter JwtAuthFilter;
+    private JwtAuthFilter jwtAuthFilter;
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/api/news/get/**", 
+                    "/api/news/get**", 
+                                "/api/news/get/**",
                                 "/api/news/all/**",
-                                "/api/auth/**").permitAll()
+                                "/api/auth/login").permitAll()
+                .requestMatchers("/api/news/delete").hasAuthority("ROLE_ADMIN")
                 .anyRequest()
                 .authenticated())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(AuthenticationProvider())
-                .addFilterBefore(JwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public AuthenticationProvider AuthenticationProvider()
+    public AuthenticationProvider authenticationProvider()
     {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(UserDetailsService());
-        authProvider.setPasswordEncoder(PasswordEncoder());
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
         
         return authProvider;
     }
 
     @Bean
-    public UserDetailsService UserDetailsService()
+    public UserDetailsService userDetailsService()
     {
         return new UserInfoService();
     }
 
     @Bean
-    public PasswordEncoder PasswordEncoder()
+    public PasswordEncoder passwordEncoder()
     {
         // Password Encryption;
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager AuthenticationManager(AuthenticationConfiguration config)
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
         throws Exception
     {
         return config.getAuthenticationManager();

@@ -1,6 +1,5 @@
 package com.management.news.service;
 
-import com.management.news.exception.NewsNotFoundException;
 import com.management.news.model.DetailedNewsSegment;
 import com.management.news.model.NewsSegment;
 import com.management.news.model.ShortNewsSegment;
@@ -18,39 +17,39 @@ import org.springframework.stereotype.Service;
 public class NewsService implements INewsService {
 
     @Autowired
-    private NewsRepository NewsRepository;
+    private NewsRepository newsRepository;
 
     @Override
-    public void SaveSegment(NewsSegment segment) {
-        NewsRepository.save(segment);
+    public void saveSegment(NewsSegment segment) {
+        newsRepository.save(segment);
     }
 
     @Override
-    public void SaveSegments(Iterable<NewsSegment> segments) {
+    public void saveSegments(Iterable<NewsSegment> segments) {
         segments.forEach((segment) -> {
-            NewsRepository.save(segment);
+            newsRepository.save(segment);
         });
     }
 
     @Override
-    public List<NewsSegment> FindAllSegments() {
-        return NewsRepository.findAll();
+    public List<NewsSegment> findAllSegments() {
+        return newsRepository.findAll();
     }
 
     @Override
-    public Iterable<NewsSegment> FindAllSegments(int pageNumber, int pageSize)
+    public Iterable<NewsSegment> findAllSegments(int pageNumber, int pageSize)
     {
         if (pageNumber < 0 || pageSize <= 0)
-            return FindAllSegments();
+            return findAllSegments();
 
         Pageable page = PageRequest.of(pageNumber, pageSize);
-        return NewsRepository.findAll(page);
+        return newsRepository.findAll(page);
     }
 
     @Override
-    public List<ShortNewsSegment> FindAllSegmentsShort()
+    public List<ShortNewsSegment> findAllSegmentsShort()
     {
-        var allNews = FindAllSegments();
+        var allNews = findAllSegments();
 
         return allNews.stream()
             .map(newsSegment -> new ShortNewsSegment(newsSegment))
@@ -58,9 +57,9 @@ public class NewsService implements INewsService {
     }
 
     @Override
-    public List<DetailedNewsSegment> FindAllSegmentsDetailed()
+    public List<DetailedNewsSegment> findAllSegmentsDetailed()
     {
-        var allNews = FindAllSegments();
+        var allNews = findAllSegments();
 
         return allNews.stream()
             .map(newsSegment -> new DetailedNewsSegment(newsSegment))
@@ -68,28 +67,28 @@ public class NewsService implements INewsService {
     }
 
     @Override
-    public Iterable<NewsSegment> FindAllSegmentsByIds(Iterable<Long> ids) {
-        return NewsRepository.findAllById(ids);
+    public Iterable<NewsSegment> findAllSegmentsByIds(Iterable<Long> ids) {
+        return newsRepository.findAllById(ids);
     }
 
     @Override
-    public NewsSegment FindSegmentById(Long id) {
-        var segment = NewsRepository.findById(id);
+    public NewsSegment findSegmentById(Long id) {
+        var segment = newsRepository.findById(id);
         if (!segment.isPresent())
-            throw new NewsNotFoundException("[-] Segment with id " + id + " is not Present");
+            throw new RuntimeException("[-] Segment with id " + id + " is not Present");
 
         return segment.get();
     }
 
     @Override
-    public void UpdateSegment(NewsSegment segment) {
-        NewsRepository.save(segment);
+    public void updateSegment(NewsSegment segment) {
+        newsRepository.save(segment);
     }
 
     @Override
-    public void DeleteSegmentById(Long id) {
+    public void deleteSegmentById(Long id) {
         // Triggering RuntimeException if id is not Present;
-        FindSegmentById(id);
-        NewsRepository.deleteById(id);
+        findSegmentById(id);
+        newsRepository.deleteById(id);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.management.news.exception.UserNotFoundException;
 import com.management.news.model.UserInfo;
 import com.management.news.model.UserInfoDetails;
 import com.management.news.repository.UserInfoRepository;
@@ -16,25 +15,25 @@ import com.management.news.repository.UserInfoRepository;
 public class UserInfoService implements IUserInfoService, UserDetailsService {
     
     @Autowired
-    private UserInfoRepository UserInfoRepository;
+    private UserInfoRepository userInfoRepository;
 
     private PasswordEncoder PasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UserNotFoundException
+    public UserDetails loadUserByUsername(String username)
     {
-        var user = UserInfoRepository.findByUsername(username);
+        var user = userInfoRepository.findByUsername(username);
         if (!user.isPresent())
         {
-            throw new UserNotFoundException(String.format("%s User Not Found", username));
+            throw new RuntimeException(String.format("%s User Not Found", username));
         }
 
         return new UserInfoDetails(user.get());
     }
 
-    public void AddUser(UserInfo user)
+    public void addUser(UserInfo user)
     {
         user.SetEncodedPassword(PasswordEncoder.encode(user.getPassword()));
-        UserInfoRepository.save(user);
+        userInfoRepository.save(user);
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.management.news.model.dto.NewsSegmentDto;
 
 @Data
 @Entity
@@ -23,4 +24,13 @@ public class NewsSegment
     @Column(name="image_url")
     @JsonProperty(value="image_url")
     private String imageURL;
+
+    public NewsSegment() { }
+
+    public NewsSegment(NewsSegmentDto segment)
+    {
+        title = segment.getTitle();
+        description = segment.getDescription();
+        imageURL = segment.getImageURL();
+    }
 }

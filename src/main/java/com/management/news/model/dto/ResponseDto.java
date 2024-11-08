@@ -22,17 +22,17 @@ public class ResponseDto
         data = _data;
     }
 
-    public static ResponseDto Ok(boolean _status, String _message)
+    public static ResponseDto ok(boolean _status, String _message)
     {
         return new ResponseDto(_status, _message, null);
     }
 
-    public static ResponseDto Ok(boolean _status, Object _data)
+    public static ResponseDto ok(boolean _status, Object _data)
     {
         return new ResponseDto(_status, null, _data);
     }
 
-    public static ResponseDto Ok(boolean _status)
+    public static ResponseDto ok(boolean _status)
     {
         return new ResponseDto(_status, null, null);
     }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.management.news.model.UserInfo;
+import com.management.news.model.dto.AuthenticationDto;
 import com.management.news.model.dto.ResponseDto;
+import com.management.news.model.dto.UserInfoDto;
 import com.management.news.service.JwtService;
 import com.management.news.service.UserInfoService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,47 +26,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthenticationController {
     
     @Autowired
-    private UserInfoService UserInfoService;
+    private UserInfoService userInfoService;
 
     @Autowired
-    private JwtService JwtService;
+    private JwtService jwtService;
 
     @Autowired
-    private AuthenticationManager AuthenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseDto UserLogin(@RequestBody UserInfo user) throws AuthenticationException
+    public ResponseDto userLogin(@RequestBody AuthenticationDto user) throws AuthenticationException
     {
         try {
-            Authentication authentication = AuthenticationManager
+            Authentication authentication = authenticationManager
                 .authenticate(
                     new UsernamePasswordAuthenticationToken(
                         user.getUsername(), user.getPassword()));
             
             if (!authentication.isAuthenticated())
             {
-                return ResponseDto.Ok(false);
+                return ResponseDto.ok(false);
             }
         }
         catch(AuthenticationException exception) {
             System.out.println(exception);
-            return ResponseDto.Ok(false);
+            return ResponseDto.ok(false);
         }
 
-        return ResponseDto.Ok(true, GenerateTokenJson(user.getUsername()));
+        return ResponseDto.ok(true, generateTokenJson(user.getUsername()));
     }
 
     @PostMapping("/signup")
-    public ResponseDto SignUp(@RequestBody UserInfo user)
+    public ResponseDto signUp(@RequestBody UserInfoDto userDto)
     {
-        UserInfoService.AddUser(user);
-        return ResponseDto.Ok(true, GenerateTokenJson(user.getUsername()));
+        UserInfo user = new UserInfo(userDto);
+        userInfoService.addUser(user);
+        return ResponseDto.ok(true, generateTokenJson(user.getUsername()));
     }
 
-    private Map<String, String> GenerateTokenJson(String username)
+    private Map<String, String> generateTokenJson(String username)
     {
         Map<String, String> token = new HashMap<String, String>();
-        token.put("token", JwtService.GenerateToken(username));
+        token.put("token", jwtService.generateToken(username));
 
         return token;
     }

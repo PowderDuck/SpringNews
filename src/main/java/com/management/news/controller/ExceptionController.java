@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExceptionController implements ErrorController {
 
     @RequestMapping("/error")
-    public ResponseDto HandleException()
+    public ResponseDto handleException()
     {
-        return ResponseDto.Ok(false);
+        return ResponseDto.ok(false);
     }
 }
