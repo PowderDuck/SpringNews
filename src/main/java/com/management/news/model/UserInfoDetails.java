@@ -39,6 +39,4 @@ public class UserInfoDetails implements UserDetails {
     public String getUsername() {
         return username;
     }
-    
-    
 }

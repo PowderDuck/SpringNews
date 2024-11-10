@@ -1,4 +1,4 @@
-package com.management.news.service;
+package com.management.news.service.iservice;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -17,6 +17,7 @@ import com.management.news.model.dto.ResponseDto;
 import com.management.news.model.dto.UserInfoDto;
 import com.management.news.service.JwtService;
 import com.management.news.service.UserInfoService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -60,6 +61,8 @@ public class AuthenticationController {
     public ResponseDto signUp(@RequestBody UserInfoDto userDto)
     {
         UserInfo user = new UserInfo(userDto);
+        user.setRoles("ROLE_USER");
+        
         userInfoService.addUser(user);
         return ResponseDto.ok(true, generateTokenJson(user.getUsername()));
     }

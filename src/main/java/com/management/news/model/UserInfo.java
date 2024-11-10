@@ -30,7 +30,6 @@ public class UserInfo
     {
         username = userInfo.getUsername();
         password = userInfo.getPassword();
-        roles = userInfo.getRoles();
     }
 
     public void SetEncodedPassword(String encodedPassword)

@@ -31,16 +31,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
-        http.authorizeHttpRequests(auth -> auth
+        http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api/news/get**", 
                                 "/api/news/get/**",
                                 "/api/news/all/**",
-                                "/api/auth/login").permitAll()
-                .requestMatchers("/api/news/delete").hasAuthority("ROLE_ADMIN")
+                                "/api/auth/**", 
+                                "/images/**").permitAll()
+                .requestMatchers(
+                    "/api/news/create").hasAuthority("ROLE_USER")
+                .requestMatchers(
+                    "/api/news/accept", 
+                                "/api/news/reject").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(
+                    "/api/news/update", 
+                                "/api/news/delete").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .anyRequest()
                 .authenticated())
-                .csrf(csrf -> csrf.disable())
+                //.csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

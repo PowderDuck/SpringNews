@@ -5,6 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.management.news.constant.NewsStatus;
 import com.management.news.model.dto.NewsSegmentDto;
 
 @Data
@@ -18,8 +19,10 @@ public class NewsSegment
     
     private String title;
     private String description;
+    private NewsStatus status = NewsStatus.PENDING;
     private final LocalDate date = LocalDate.now();
     private final Long views = 0L;
+    private String author;
 
     @Column(name="image_url")
     @JsonProperty(value="image_url")
@@ -31,6 +34,13 @@ public class NewsSegment
     {
         title = segment.getTitle();
         description = segment.getDescription();
-        imageURL = segment.getImageURL();
+    }
+
+    public NewsSegment(NewsSegment segment)
+    {
+        id = segment.id;
+        title = segment.title;
+        description = segment.title;
+        status = segment.status;
     }
 }

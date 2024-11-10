@@ -1,6 +1,6 @@
 package com.management.news.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -9,7 +9,5 @@ public class NewsSegmentDto {
     
     private String title;
     private String description;
-
-    @JsonProperty("image_url")
-    private String imageURL;
+    private MultipartFile imageFile;
 }
